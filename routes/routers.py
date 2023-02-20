@@ -10,10 +10,10 @@ router = APIRouter()
 @router.post("/", response_description="Usuario criado", status_code=status.HTTP_201_CREATED, response_model=Usuario)
 def cria_usuario(request: Request, usuario: Usuario = Body(...)): 
     usuario = jsonable_encoder(usuario)
-    
-    if request.app.database["usuario"].find_one({"cpf": usuario["cpf"]}):
 
-        return {"mensagem": "CPF já cadastrado"}
+    if (Usuario := request.app.database["usuario"].find_one({"cpf": usuario["cpf"]})):
+           
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"cpf cadastrado")
         
     novo_usuario = request.app.database["usuario"].insert_one(usuario)
     cria_usuario = request.app.database["usuario"].find_one(
