@@ -12,8 +12,8 @@ app = FastAPI(
 
 @app.on_event("startup")
 def startup_db_client():
-    app.mongodb_client = MongoClient(config["${{shared.ATLAS_URI}}"])
-    app.database = app.mongodb_client[config["${{shared.DB_NAME}}"]]
+    app.mongodb_client = MongoClient(config["ATLAS_URI"])
+    app.database = app.mongodb_client[config["DB_NAME"]]
 
 @app.on_event("shutdown")
 def shutdown_db_client():
